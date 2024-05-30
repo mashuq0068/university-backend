@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import { StudentServices } from './student.service';
 import sendResponse from '../../utils/SendResponse';
 
+
 const getSingleStudent = async (
   req: Request,
   res: Response,
@@ -35,7 +36,7 @@ const getAllStudents = async (
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Student are retrieved succesfully',
+      message: 'Student are retrieved successfully',
       data: result,
     });
   } catch (err) {

@@ -2,10 +2,12 @@
 import { userServices } from './user.service';
 import sendResponse from '../../utils/SendResponse';
 import httpStatus from 'http-status';
-import asyncHandler from '../../utils/asyncHandler';
+// import asyncHandler from '../../utils/asyncHandler';
+import { RequestHandler } from 'express';
+// import { TStudent } from '../student/student.interface';
 
 
-const createStudent = asyncHandler( async (req, res) => {
+const createStudent:RequestHandler =  async (req, res) => {
  
     const { password, student: studentData } = req.body;
     const result = await userServices.createStudentIntoDB(
@@ -16,11 +18,11 @@ const createStudent = asyncHandler( async (req, res) => {
       statusCode:httpStatus.OK,
       message:"student user created successfully",
       success:true,
-      data:result
+      data: result
 
     })
  
-});
+};
 
 export const userControllers = {
   createStudent,

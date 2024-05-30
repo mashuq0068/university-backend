@@ -8,3 +8,4 @@ export const userValidationSchema = object({
     .max(20, { message: 'password must be in 20 characters' })
     .optional(),
 });
+

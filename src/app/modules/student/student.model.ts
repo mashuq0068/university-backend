@@ -90,7 +90,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: Schema.Types.ObjectId,
       required: [true, 'User id is required'],
       unique: true,
-      ref:'UserModel'
+      ref:'user'
       
     },
     name: {
@@ -116,7 +116,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: String,
       required: [true, 'Emergency contact number is required'],
     },
-    bloogGroup: {
+    bloodGroup: {
       type: String,
       enum: {
         values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
@@ -139,6 +139,11 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: localGuradianSchema,
       required: [true, 'Local guardian information is required'],
     },
+    academicSemester:{
+      type:Schema.Types.ObjectId,
+      required: [true, 'Academic semester is required'],
+      ref:'academicSemester'
+    },
     profileImg: { type: String },
     isDeleted: {
       type: Boolean,
@@ -156,9 +161,9 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 studentSchema.virtual('fullName').get(function () {
   return this.name.firstName + this.name.middleName + this.name.lastName;
 });
-studentSchema.virtual('retiredRemindAge').get(function(){
-  return 60 - 42
-})
+// studentSchema.virtual('retiredRemindAge').get(function(){
+//   return 60 - 42
+// })
 // Query Middleware
 studentSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
