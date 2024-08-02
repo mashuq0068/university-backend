@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IUser } from './user.interface';
+import { IUser, IUserMethods } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
 
@@ -12,6 +12,7 @@ const userSchema = new Schema<IUser>(
     password: {
       type: String,
       required: true,
+      select: 0,
     },
     needsPasswordChange: {
       type: Boolean,
@@ -36,15 +37,30 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
   },
 );
-userSchema.pre('save' , async function (next){
+
+userSchema.statics.isUserExist = async function (
+  id: string,
+): Promise<IUser | null> {
+  const user = await UserModel.findOne({ id: id });
+  return user;
+};
+
+userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
-  user.password =await bcrypt.hash(user.password , Number(config.bcrypt_salt_rounds))
-  next()
-})
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
 
-userSchema.post('save' , async function (doc,next) {
+userSchema.post('save', async function (doc, next) {
   doc.password = '######';
-  next()
-})
-export const UserModel = model<IUser>('user', userSchema);
+  next();
+});
+// userSchema.post('findOneAndUpdate', async function (doc, next) {
+//   doc.password = '######';
+//   next();
+// });
+export const UserModel = model<IUser, IUserMethods>('user', userSchema);

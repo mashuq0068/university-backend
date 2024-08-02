@@ -89,4 +89,4 @@ const facultySchema = new Schema<IFaculty>({
   },
 });
 
-export const FacultyModel = model<IFaculty>('faculty' , facultySchema)
+export const Faculty = model<IFaculty>('faculty' , facultySchema)

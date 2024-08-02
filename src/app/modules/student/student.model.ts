@@ -26,58 +26,63 @@ const userNameSchema = new Schema<TUserName>({
   },
 });
 
-const guardianSchema = new Schema<TGuardian>({
-  fatherName: {
-    type: String,
-    trim: true,
-    required: [true, 'Father Name is required'],
+const guardianSchema = new Schema<TGuardian>(
+  {
+    fatherName: {
+      type: String,
+      trim: true,
+      required: [true, 'Father Name is required'],
+    },
+    fatherOccupation: {
+      type: String,
+      trim: true,
+      required: [true, 'Father occupation is required'],
+    },
+    fatherContactNo: {
+      type: String,
+      required: [true, 'Father Contact No is required'],
+    },
+    motherName: {
+      type: String,
+      required: [true, 'Mother Name is required'],
+    },
+    motherOccupation: {
+      type: String,
+      required: [true, 'Mother occupation is required'],
+    },
+    motherContactNo: {
+      type: String,
+      required: [true, 'Mother Contact No is required'],
+    },
   },
-  fatherOccupation: {
-    type: String,
-    trim: true,
-    required: [true, 'Father occupation is required'],
+  {
+    _id: false,
   },
-  fatherContactNo: {
-    type: String,
-    required: [true, 'Father Contact No is required'],
-  },
-  motherName: {
-    type: String,
-    required: [true, 'Mother Name is required'],
-  },
-  motherOccupation: {
-    type: String,
-    required: [true, 'Mother occupation is required'],
-  },
-  motherContactNo: {
-    type: String,
-    required: [true, 'Mother Contact No is required'],
-  },
-},
-{
-  _id:false
-});
+);
 
-const localGuradianSchema = new Schema<TLocalGuardian>({
-  name: {
-    type: String,
-    required: [true, 'Name is required'],
+const localGuradianSchema = new Schema<TLocalGuardian>(
+  {
+    name: {
+      type: String,
+      required: [true, 'Name is required'],
+    },
+    occupation: {
+      type: String,
+      required: [true, 'Occupation is required'],
+    },
+    contactNo: {
+      type: String,
+      required: [true, 'Contact number is required'],
+    },
+    address: {
+      type: String,
+      required: [true, 'Address is required'],
+    },
   },
-  occupation: {
-    type: String,
-    required: [true, 'Occupation is required'],
+  {
+    _id: false,
   },
-  contactNo: {
-    type: String,
-    required: [true, 'Contact number is required'],
-  },
-  address: {
-    type: String,
-    required: [true, 'Address is required'],
-  },
-},{
-  _id:false
-});
+);
 
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
@@ -90,8 +95,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: Schema.Types.ObjectId,
       required: [true, 'User id is required'],
       unique: true,
-      ref:'user'
-      
+      ref: 'user',
     },
     name: {
       type: userNameSchema,
@@ -139,10 +143,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: localGuradianSchema,
       required: [true, 'Local guardian information is required'],
     },
-    academicSemester:{
-      type:Schema.Types.ObjectId,
-      required: [true, 'Academic semester is required'],
-      ref:'academicSemester'
+    academicSemester: {
+      type: Schema.Types.ObjectId,
+      // required: [true, 'Academic semester is required'],
+      ref: 'academicSemester',
     },
     profileImg: { type: String },
     isDeleted: {
@@ -159,7 +163,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 
 // virtual
 studentSchema.virtual('fullName').get(function () {
-  return this.name.firstName + this.name.middleName + this.name.lastName;
+  return this?.name?.firstName + this?.name?.middleName + this?.name?.lastName;
 });
 // studentSchema.virtual('retiredRemindAge').get(function(){
 //   return 60 - 42
@@ -185,5 +189,10 @@ studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
-
+studentSchema.statics.findByName = async function (
+  name: string,
+): Promise<TStudent[]> {
+  const user = await Student.find({ name: name });
+  return user;
+};
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);

@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { TUserName } from '../student/student.interface';
 
 export interface IFaculty {
@@ -18,4 +18,8 @@ export interface IFaculty {
   academicDepartment: Types.ObjectId;
   profileImg?: string;
   isDeleted: boolean;
+}
+
+export class FacultyModelMethods extends Model<IFaculty>{
+  
 }

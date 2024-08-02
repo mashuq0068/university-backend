@@ -90,9 +90,14 @@ export type TStudent = {
 //for creating static
 
 export interface StudentModel extends Model<TStudent> {
+ 
   // eslint-disable-next-line no-unused-vars
   isUserExists(id: string): Promise<TStudent | null>;
+  // eslint-disable-next-line no-unused-vars
+  findByName(name: string): Promise<TStudent | null>;
+  getAllStudents(): Promise<TStudent[]>;
 }
+
 
 // for creating instance
 
